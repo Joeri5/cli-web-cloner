@@ -1,5 +1,4 @@
-import {IAliasRemoveOptions} from "./IAliasRemoveOptions";
-import {IAliasListOptions} from "./IAliasListOptions";
+import {IAliasListOptions, IAliasRemoveOptions} from "./options";
 
 export interface IAliasService {
     set(deploymentUrl: string, customDomain: string): Promise<void>;

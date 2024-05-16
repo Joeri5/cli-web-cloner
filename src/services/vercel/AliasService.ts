@@ -1,6 +1,8 @@
-import {IAliasListOptions, IAliasRemoveOptions, IAliasService} from "../../interfaces/vercel";
+import {IAliasListOptions, IAliasRemoveOptions, IAliasService} from "../../interfaces";
 import {exec} from "child_process";
+import {injectable} from "tsyringe";
 
+@injectable()
 class AliasService implements IAliasService {
     async set(deploymentUrl: string, customDomain: string): Promise<void> {
         // logic to set alias

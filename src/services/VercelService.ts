@@ -1,11 +1,13 @@
-import {IVercelService} from "../interfaces/IVercelService";
-import {IAliasService} from "../interfaces/vercel";
-import {AliasService} from "./vercel";
+import {IAliasService, IBisectService, IVercelService} from "../interfaces";
+import {inject, injectable} from "tsyringe";
 
+@injectable()
 class VercelService implements IVercelService {
-    alias: IAliasService;
-
-    constructor() {
-        this.alias = new AliasService();
+    constructor(
+        @inject("IAliasService") public alias: IAliasService,
+        @inject("IBisectService") public bisect: IBisectService
+    ) {
     }
 }
+
+export {VercelService};

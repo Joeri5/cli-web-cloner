@@ -1,2 +1,3 @@
-export * from "./alias";
-export * from "./IGlobalOptions";
+export * from "./IAliasService";
+export * from "./IBisectService";
+export * from "./options";
