@@ -15,11 +15,13 @@ import {
     AxiosHttpClient,
     BisectService,
     BuildService,
+    CertsService,
     DomainManager,
     VercelService,
     WebsiteCloner,
     WebsiteDeployer
 } from "./services";
+import {ICertsService} from "./interfaces/vercel/ICertsService";
 
 container.register<IWebsiteCloner>('IWebsiteCloner', {useClass: WebsiteCloner});
 container.register<IWebsiteDeployer>('IWebsiteDeployer', {useClass: WebsiteDeployer});
@@ -31,3 +33,4 @@ container.register<IVercelService>("IVercelService", VercelService);
 container.register<IAliasService>("IAliasService", AliasService);
 container.register<IBisectService>("IBisectService", BisectService);
 container.register<IBuildService>("IBuildService", BuildService);
+container.register<ICertsService>("ICertsService", CertsService);

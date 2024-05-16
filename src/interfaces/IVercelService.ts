@@ -1,4 +1,5 @@
 import {IAliasService, IBisectService, IBuildService} from "./vercel";
+import {ICertsService} from "./vercel/ICertsService";
 
 interface IVercelService {
     // alias
@@ -12,6 +13,10 @@ interface IVercelService {
     // build
     // build a vercel project locally or in your own ci environment
     build: IBuildService;
+
+    // certs
+    // manage certificates for your domains
+    certs: ICertsService;
 }
 
 export {IVercelService};

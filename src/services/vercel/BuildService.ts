@@ -1,8 +1,7 @@
-import {IBuildService} from "../../interfaces";
+import {IBuildOptions, IBuildService} from "../../interfaces";
 import {injectable} from "tsyringe";
 import {exec} from "child_process";
 import {appendGlobalOptions} from "../../utility";
-import {IBuildOptions} from "../../interfaces/vercel/options/build";
 
 @injectable()
 class BuildService implements IBuildService {

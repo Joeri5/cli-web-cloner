@@ -51,4 +51,21 @@ describe("VercelService", () => {
             expect(exec).toHaveBeenCalled();
         });
     });
+
+    describe("certs", () => {
+        it("should list certs", async () => {
+            await vercelService.certs.list({limit: 100});
+            expect(exec).toHaveBeenCalled();
+        });
+
+        it("should issue certs", async () => {
+            await vercelService.certs.issue('my-domain.com', {debug: true});
+            expect(exec).toHaveBeenCalled();
+        });
+
+        it("should remove certs", async () => {
+            await vercelService.certs.remove(['cert-id-1', 'cert-id-2'], {help: true});
+            expect(exec).toHaveBeenCalled();
+        });
+    });
 });
