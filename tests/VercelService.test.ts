@@ -37,10 +37,17 @@ describe("VercelService", () => {
                 good: 'https://example.com',
                 bad: 'https://example-s93n1nfa.vercel.app',
                 path: '/blog/first-post',
-                open: "true",
+                open: true,
                 run: './test.sh',
                 token: 'my-token'
             });
+            expect(exec).toHaveBeenCalled();
+        });
+    });
+
+    describe("build", () => {
+        it("should run build with options", async () => {
+            await vercelService.build.build({prod: true, yes: true, token: 'my-token'});
             expect(exec).toHaveBeenCalled();
         });
     });

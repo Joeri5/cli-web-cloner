@@ -1,12 +1,16 @@
-import {IAliasListOptions, IAliasRemoveOptions, IAliasService} from "../../interfaces";
-import {exec} from "child_process";
+import {appendGlobalOptions} from "../../utility";
 import {injectable} from "tsyringe";
+import {IAliasListOptions, IAliasRemoveOptions, IAliasService, IGlobalOptions} from "../../interfaces";
+import {exec} from "child_process";
 
 @injectable()
 class AliasService implements IAliasService {
-    async set(deploymentUrl: string, customDomain: string): Promise<void> {
-        // logic to set alias
-        exec(`vercel alias ${deploymentUrl} ${customDomain}`, (error, stdout, stderr) => {
+    async set(deploymentUrl: string, customDomain: string, options?: IGlobalOptions): Promise<void> {
+        const commandParts = [`vercel alias ${deploymentUrl} ${customDomain}`];
+        appendGlobalOptions(commandParts, options);
+        const command = commandParts.join(' ');
+
+        exec(command, (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
@@ -17,8 +21,11 @@ class AliasService implements IAliasService {
     }
 
     async remove(customDomain: string, options?: IAliasRemoveOptions): Promise<void> {
-        // logic to remove alias
-        exec(`vercel alias rm ${customDomain}`, (error, stdout, stderr) => {
+        const commandParts = [`vercel alias rm ${customDomain}`];
+        appendGlobalOptions(commandParts, options);
+        const command = commandParts.join(' ');
+
+        exec(command, (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;
@@ -29,8 +36,11 @@ class AliasService implements IAliasService {
     }
 
     async list(options?: IAliasListOptions): Promise<void> {
-        // logic to list aliases
-        exec(`vercel alias ls`, (error, stdout, stderr) => {
+        const commandParts = ['vercel alias ls'];
+        appendGlobalOptions(commandParts, options);
+        const command = commandParts.join(' ');
+
+        exec(command, (error, stdout, stderr) => {
             if (error) {
                 console.error(`exec error: ${error}`);
                 return;

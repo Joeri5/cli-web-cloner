@@ -3,6 +3,7 @@ import {container} from "tsyringe";
 import {
     IAliasService,
     IBisectService,
+    IBuildService,
     IDomainManager,
     IHttpClient,
     IVercelService,
@@ -13,6 +14,7 @@ import {
     AliasService,
     AxiosHttpClient,
     BisectService,
+    BuildService,
     DomainManager,
     VercelService,
     WebsiteCloner,
@@ -28,3 +30,4 @@ container.register<IVercelService>("IVercelService", VercelService);
 // services needed by VercelService
 container.register<IAliasService>("IAliasService", AliasService);
 container.register<IBisectService>("IBisectService", BisectService);
+container.register<IBuildService>("IBuildService", BuildService);

@@ -4,6 +4,6 @@ export interface IBisectOptions extends IGlobalOptions {
     good?: string;
     bad?: string;
     path?: string;
-    open?: string;
+    open?: boolean;
     run?: string;
 }
