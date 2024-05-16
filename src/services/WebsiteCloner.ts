@@ -1,14 +1,16 @@
-import {injectable} from "tsyringe";
-import axios from "axios";
+import {inject, injectable} from "tsyringe";
 import fs from "fs";
 import path from "path";
-import {IWebsiteCloner} from "../interfaces";
+import {IHttpClient, IWebsiteCloner} from "../interfaces";
 
 @injectable()
 class WebsiteCloner implements IWebsiteCloner {
+    constructor(@inject('IHttpClient') private httpClient: IHttpClient) {
+    }
+
     async clone(sourceUrl: string, destDir: string): Promise<void> {
         try {
-            const response = await axios.get(sourceUrl);
+            const response = await this.httpClient.get(sourceUrl);
             if (!fs.existsSync(destDir)) {
                 fs.mkdirSync(destDir);
             }
