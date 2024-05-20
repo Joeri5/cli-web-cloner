@@ -1,4 +1,4 @@
-import "reflect-metadat";
+import "reflect-metadata";
 import {Command} from "commander";
 import {container} from "tsyringe";
 import {IDomainManager, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";

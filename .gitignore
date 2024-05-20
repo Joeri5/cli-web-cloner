@@ -1,4 +1,29 @@
-.idea
-.env
-package-lock.json
-/node_modules
+# Node modules
+node_modules/
+
+# Build directories
+dist/
+build/
+
+# TypeScript compiled JavaScript files
+*.js
+*.js.map
+
+# Specific directories
+src/**/*.js
+src/**/*.js.map
+
+# Exclude these files if they're at any level within src
+**/src/**/*.js
+**/src/**/*.js.map
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
