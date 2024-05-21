@@ -1,16 +1,16 @@
 import {inject, injectable} from "tsyringe";
 import fs from "fs";
 import path from "path";
-import {IHttpClient, IWebsiteCloner} from "../interfaces";
+import {IApiService, IWebsiteCloner} from "../interfaces";
 
 @injectable()
 class WebsiteCloner implements IWebsiteCloner {
-    constructor(@inject('IHttpClient') private httpClient: IHttpClient) {
+    constructor(@inject('IApiService') private apiService: IApiService) {
     }
 
     async clone(sourceUrl: string, destDir: string): Promise<void> {
         try {
-            const response = await this.httpClient.get(sourceUrl);
+            const response = await this.apiService.get(sourceUrl);
             if (!fs.existsSync(destDir)) {
                 fs.mkdirSync(destDir);
             }
