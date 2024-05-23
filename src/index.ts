@@ -7,6 +7,7 @@ import {
     IApiService,
     IConfigExtractorService,
     IDomainManager,
+    IUpdateConfigService,
     IWebsiteCloner,
     IWebsiteDeployer,
     IWriteConfigService
@@ -38,9 +39,18 @@ program
         console.log(key);
 
         const writeConfigService = container.resolve<IWriteConfigService>("IWriteConfigService");
-        await writeConfigService.write('subchild3', {key4: 'value4', key5: 'value5'})
+        try {
+            await writeConfigService.write('subchild2', {key4: 'value4', key5: 'value5'})
+        } catch (e) {
+            console.error(e);
+        }
+        await writeConfigService.write('subchild22', {key4: 'value4', key5: 'value5'})
 
         console.log('Child written successfully.');
+
+        const updateConfigService = container.resolve<IUpdateConfigService>("IUpdateConfigService");
+        await updateConfigService.updateChild('subchild22', {key2: 'newvalue2', key3: 'newvalue3'});
+        console.log('Child updated successfully.');
     });
 
 program

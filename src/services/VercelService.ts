@@ -1,9 +1,8 @@
-import {IAliasService, IBisectService, IBuildService, IVercelService} from "../interfaces";
+import {IAliasService, IBisectService, IBuildService, ICertsService, IVercelService} from "../interfaces";
 import {inject, injectable} from "tsyringe";
-import {ICertsService} from "../interfaces/vercel/ICertsService";
 
 @injectable()
-class VercelService implements IVercelService {
+export class VercelService implements IVercelService {
     constructor(
         @inject("IAliasService") public alias: IAliasService,
         @inject("IBisectService") public bisect: IBisectService,
@@ -12,5 +11,3 @@ class VercelService implements IVercelService {
     ) {
     }
 }
-
-export {VercelService};

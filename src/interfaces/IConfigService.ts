@@ -2,15 +2,14 @@ import {IDeleteConfigService, IReadConfigService, IUpdateConfigService, IWriteCo
 
 export interface IConfigService {
     // write config file
-    write: IWriteConfigService;
+    writeConfig: IWriteConfigService;
 
     // read config file
-    read: IReadConfigService;
+    readConfig: IReadConfigService;
 
     // update config file
-    update: IUpdateConfigService;
+    updateConfig: IUpdateConfigService;
 
     // delete config file
-    delete: IDeleteConfigService;
-
+    deleteConfig: IDeleteConfigService;
 }

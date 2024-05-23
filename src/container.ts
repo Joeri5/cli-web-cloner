@@ -6,10 +6,15 @@ import {
     IBisectService,
     IBuildService,
     IConfigExtractorService,
+    IConfigService,
+    IDeleteConfigService,
     IDomainManager,
+    IReadConfigService,
+    IUpdateConfigService,
     IVercelService,
     IWebsiteCloner,
-    IWebsiteDeployer
+    IWebsiteDeployer,
+    IWriteConfigService
 } from "./interfaces";
 import {
     AliasService,
@@ -18,13 +23,17 @@ import {
     BuildService,
     CertsService,
     ConfigExtractorService,
+    DeleteConfigService,
     DomainManager,
+    ReadConfigService,
+    UpdateConfigService,
     VercelService,
     WebsiteCloner,
     WebsiteDeployer,
     WriteConfigService
 } from "./services";
 import {ICertsService} from "./interfaces/vercel/ICertsService";
+import {ConfigService} from "./services/ConfigService";
 // import {ConfigService} from "./services/ConfigService";
 
 container.register<IWebsiteCloner>('IWebsiteCloner', {
@@ -43,13 +52,9 @@ container.register<IApiService>("IApiService", {
     useClass: AxiosApiService,
 });
 
+// --------------------------------------------------------------------------------------------------------------------
 container.register<IVercelService>("IVercelService", {
     useClass: VercelService,
-});
-
-// --------------------------------------------------------------------------------------------------------------------
-container.register<IConfigExtractorService>("IConfigExtractorService", {
-    useClass: ConfigExtractorService,
 });
 
 // <---- services needed by VercelService ---->
@@ -70,15 +75,27 @@ container.register<ICertsService>("ICertsService", {
 });
 
 // --------------------------------------------------------------------------------------------------------------------
-// container.register("IConfigService", {
-//     useClass: ConfigService,
-// });
+container.register<IConfigService>("IConfigService", {
+    useClass: ConfigService,
+});
 
 // <---- services needed by ConfigService ---->
-container.register("IReadConfigService", {
+container.register<IConfigExtractorService>("IConfigExtractorService", {
     useClass: ConfigExtractorService,
 });
 
-container.register("IWriteConfigService", {
+container.register<IReadConfigService>("IReadConfigService", {
+    useClass: ReadConfigService,
+});
+
+container.register<IWriteConfigService>("IWriteConfigService", {
     useClass: WriteConfigService,
+});
+
+container.register<IUpdateConfigService>("IUpdateConfigService", {
+    useClass: UpdateConfigService,
+});
+
+container.register<IDeleteConfigService>("IDeleteConfigService", {
+    useClass: DeleteConfigService,
 });
