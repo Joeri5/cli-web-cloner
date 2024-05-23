@@ -6,6 +6,8 @@ import {container} from "tsyringe";
 import {IApiService, IDomainManager, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
 import "./container";
 import {clearDotLoader, createDotLoader} from "./utility";
+import {readConfigFile, writeConfigFile} from "./utility/config";
+import {extract, extractChild} from "./hello";
 
 const program = new Command();
 
@@ -13,6 +15,17 @@ program
     .name("web-clone-deployer")
     .description("CLI to clone, deploy websites and add domains")
     .version("1.0.0");
+
+program
+    .command("dir")
+    .description("Get the current directory")
+    .action(async () => {
+        const content = await extract();
+        console.log(content);
+
+        const child = await extractChild("child2");
+        console.log(child);
+    })
 
 program
     .command('login')
@@ -45,6 +58,8 @@ program
                 try {
                     const result = await apiService.get(`https://api.vercel.com/registration/verify?token=${response.data.token}&email=${email}`);
                     if (result.data.token) {
+                        writeConfigFile('VERCEL_TOKEN', result.data.token);
+                        readConfigFile(); // Trigger a read to update the config
                         clearDotLoader(loaderInterval, "Email verified successfully!");
                         clearInterval(validationInterval);
                         return true; // Verification successful
