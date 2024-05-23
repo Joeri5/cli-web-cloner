@@ -3,4 +3,7 @@ export * from "./IWebsiteDeployer";
 export * from "./IDomainManager";
 export * from "./IApiService";
 export * from "./IVercelService";
+export * from "./IConfigService";
+export * from "./IConfigExtractorService";
 export * from "./vercel/";
+export * from "./config/";

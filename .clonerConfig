@@ -1,0 +1,5 @@
+[child]
+key: string
+
+[child2]
+key2: string
