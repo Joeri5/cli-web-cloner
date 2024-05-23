@@ -1,15 +1,17 @@
-// import {injectable} from "tsyringe";
-// import {IReadConfigService} from "../../interfaces";
-//
-// @injectable()
-// class ReadConfigService implements IReadConfigService {
-//     async readChild(child: string): Promise<Record<string, string>> {
-//         try {
-//             const configContent = await fs.readFile(this.configFilePath, 'utf8');
-//             return this.extractKeyValuePairs(child, configContent);
-//         } catch (error) {
-//             console.error(`Error reading the config file: ${error.message}`);
-//             return {};
-//         }
-//     }
-// }
+import {inject, injectable} from "tsyringe";
+import {IConfigExtractorService, IReadConfigService} from "../../interfaces";
+
+@injectable()
+export class ReadConfigService implements IReadConfigService {
+    constructor(@inject("IConfigExtractorService") private configExtractorService: IConfigExtractorService) {
+    }
+
+    readChild(child: string): Promise<Record<string, string>> {
+        return this.configExtractorService.extractChild(child);
+    }
+
+    readKeyFromChild(child: string, key: string): Promise<string> {
+        return this.configExtractorService.extractKeyFromChild(child, key);
+    }
+
+}

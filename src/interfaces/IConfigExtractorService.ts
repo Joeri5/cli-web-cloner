@@ -1,10 +1,10 @@
 export interface IConfigExtractorService {
     // extract config file
-    extract(): Promise<void> | undefined;
+    extract(): Promise<string>;
 
     // extract config file child
-    extractChild(child: string): Record<string, Record<string, string>> | undefined;
+    extractChild(child: string): Promise<Record<string, string>>;
 
     // extract config file key from child
-    extractKeyFromChild(child: string, key: string): Record<string, string> | undefined;
+    extractKeyFromChild(child: string, key: string): Promise<string>;
 }

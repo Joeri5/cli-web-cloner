@@ -3,11 +3,18 @@
 import "reflect-metadata";
 import {Command} from "commander";
 import {container} from "tsyringe";
-import {IApiService, IDomainManager, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
+import {
+    IApiService,
+    IConfigExtractorService,
+    IDomainManager,
+    IWebsiteCloner,
+    IWebsiteDeployer,
+    IWriteConfigService
+} from "./interfaces";
 import "./container";
 import {clearDotLoader, createDotLoader} from "./utility";
 import {readConfigFile, writeConfigFile} from "./utility/config";
-import {extract, extractChild} from "./hello";
+
 
 const program = new Command();
 
@@ -20,13 +27,21 @@ program
     .command("dir")
     .description("Get the current directory")
     .action(async () => {
-        const content = await extract();
+        const configExtractorService = container.resolve<IConfigExtractorService>("IConfigExtractorService");
+        const content = await configExtractorService.extract();
         console.log(content);
 
-        const child = await extractChild("child2");
-        const test = "hello world";
+        const child = await configExtractorService.extractChild("child2");
         console.log(child);
-    })
+
+        const key = await configExtractorService.extractKeyFromChild("child2", "key2");
+        console.log(key);
+
+        const writeConfigService = container.resolve<IWriteConfigService>("IWriteConfigService");
+        await writeConfigService.write('subchild3', {key4: 'value4', key5: 'value5'})
+
+        console.log('Child written successfully.');
+    });
 
 program
     .command('login')

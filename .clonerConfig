@@ -3,3 +3,7 @@ key: string
 
 [child2]
 key2: string
+
+[subchild3]
+key4: value4
+key5: value5
