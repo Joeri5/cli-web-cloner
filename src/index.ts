@@ -24,6 +24,7 @@ program
         console.log(content);
 
         const child = await extractChild("child2");
+        const test = "hello world";
         console.log(child);
     })
 
