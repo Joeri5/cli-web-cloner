@@ -1,5 +1,4 @@
-import {IAliasService, IBisectService, IBuildService} from "./vercel";
-import {ICertsService} from "./vercel/ICertsService";
+import {IAliasService, IBisectService, IBuildService, ICertsService, IVercelAuthService} from "./vercel";
 
 export interface IVercelService {
     // alias
@@ -17,4 +16,8 @@ export interface IVercelService {
     // certs
     // manage certificates for your domains
     certs: ICertsService;
+
+    // auth
+    // manage authentication with vercel
+    auth: IVercelAuthService;
 }

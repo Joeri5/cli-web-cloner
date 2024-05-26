@@ -4,5 +4,6 @@ export * from "./DomainManager";
 export * from "./AxiosApiService";
 export * from "./ConfigExtractorService";
 export * from "./VercelService";
+export * from "./ConfigService";
 export * from "./config/";
 export * from "./vercel/";

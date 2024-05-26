@@ -1,17 +1,5 @@
-[child]
-key: string
 
-[child2]
-key2: string
 
-[subchild3]
-key4: value4
-key5: value5
-
-[subchild2]
-key2: newvalue2
-key3: newvalue3
-
-[subchild22]
-key2: newvalue2
-key3: newvalue3
+[auth]
+token: S8ErE2YDnpvMvGtHyX9E91Kc
+email: joerischenk@outlook.com

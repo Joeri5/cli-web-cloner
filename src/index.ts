@@ -3,18 +3,8 @@
 import "reflect-metadata";
 import {Command} from "commander";
 import {container} from "tsyringe";
-import {
-    IApiService,
-    IConfigExtractorService,
-    IDomainManager,
-    IUpdateConfigService,
-    IWebsiteCloner,
-    IWebsiteDeployer,
-    IWriteConfigService
-} from "./interfaces";
+import {IDomainManager, IVercelService, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
 import "./container";
-import {clearDotLoader, createDotLoader} from "./utility";
-import {readConfigFile, writeConfigFile} from "./utility/config";
 
 
 const program = new Command();
@@ -24,93 +14,69 @@ program
     .description("CLI to clone, deploy websites and add domains")
     .version("1.0.0");
 
-program
-    .command("dir")
-    .description("Get the current directory")
-    .action(async () => {
-        const configExtractorService = container.resolve<IConfigExtractorService>("IConfigExtractorService");
-        const content = await configExtractorService.extract();
-        console.log(content);
 
-        const child = await configExtractorService.extractChild("child2");
-        console.log(child);
+const authCommand = program
+    .command('auth')
+    .description('Authenticate with Vercel');
 
-        const key = await configExtractorService.extractKeyFromChild("child2", "key2");
-        console.log(key);
-
-        const writeConfigService = container.resolve<IWriteConfigService>("IWriteConfigService");
-        try {
-            await writeConfigService.write('subchild2', {key4: 'value4', key5: 'value5'})
-        } catch (e) {
-            console.error(e);
-        }
-        await writeConfigService.write('subchild22', {key4: 'value4', key5: 'value5'})
-
-        console.log('Child written successfully.');
-
-        const updateConfigService = container.resolve<IUpdateConfigService>("IUpdateConfigService");
-        await updateConfigService.updateChild('subchild22', {key2: 'newvalue2', key3: 'newvalue3'});
-        console.log('Child updated successfully.');
-    });
-
-program
+authCommand
     .command('login')
-    .description('Authenticate with Vercel using email')
+    .description('Login to Vercel account')
     .argument('<email>', 'Email address to use for Vercel login')
     .action(async (email: string) => {
-        const apiService = container.resolve<IApiService>("IApiService");
+        const vercelService = container.resolve<IVercelService>("IVercelService");
 
-        const showError = (message: string) => {
-            console.error(message);
-        };
+        if (await vercelService.auth.isAuthenticated())
+            return console.log("You are already logged in.");
 
         try {
-            const loaderInterval = createDotLoader('Email verification in progress. Please check your inbox and spam folder.');
-
-            const response = await apiService.post("https://api.vercel.com/v2/registration?mode=login", {
-                email: email,
-                tokenName: "cloner"
-            });
-
-            if (!response) {
-                clearDotLoader(loaderInterval, "Error logging in. Please try again later.");
-                return;
-            }
-
-            let attemptCount = 0;
-            const maxAttempts = 12; // Try for a minute (12 * 5 seconds)
-
-            const checkEmailValidation = async () => {
-                try {
-                    const result = await apiService.get(`https://api.vercel.com/registration/verify?token=${response.data.token}&email=${email}`);
-                    if (result.data.token) {
-                        writeConfigFile('VERCEL_TOKEN', result.data.token);
-                        readConfigFile(); // Trigger a read to update the config
-                        clearDotLoader(loaderInterval, "Email verified successfully!");
-                        clearInterval(validationInterval);
-                        return true; // Verification successful
-                    }
-                } catch (error) {
-                    // Ignore error
-                }
-
-                attemptCount++;
-                if (attemptCount >= maxAttempts) {
-                    clearDotLoader(loaderInterval, "Verification failed after multiple attempts. Please try again.");
-                    clearInterval(validationInterval);
-                    return true; // Max attempts reached
-                }
-                return false; // Continue trying
-            };
-
-            const validationInterval = setInterval(async () => {
-                const done = await checkEmailValidation();
-                if (done) clearInterval(validationInterval);
-            }, 5000); // Try every 5 seconds
-
+            await vercelService.auth.login(email);
         } catch (error) {
-            showError("Error logging in. Please try again later.");
+            console.error("Error logging in. Please try again later.");
         }
+    });
+
+authCommand
+    .command('logout')
+    .description('Logout from Vercel account')
+    .action(async () => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+
+        if (!await vercelService.auth.isAuthenticated())
+            return console.log("You are not logged in.");
+
+        try {
+            await vercelService.auth.logout();
+        } catch (error) {
+            console.error("Error logging out. Please try again later.");
+        }
+    });
+
+authCommand
+    .command('whoami')
+    .description('Check the currently authenticated user')
+    .action(async () => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+
+        if (!await vercelService.auth.isAuthenticated())
+            return console.log("You are not logged in.");
+
+        try {
+            await vercelService.auth.whoami();
+        } catch (error) {
+            console.error("Error checking user. Please try again later.");
+        }
+    });
+
+authCommand
+    .command('status')
+    .description('Check the authentication status')
+    .action(async () => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+
+        if (await vercelService.auth.isAuthenticated())
+            return console.log("You are logged in.");
+        console.log("You are not logged in.");
     });
 
 program

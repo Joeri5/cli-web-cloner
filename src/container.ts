@@ -5,12 +5,14 @@ import {
     IApiService,
     IBisectService,
     IBuildService,
+    ICertsService,
     IConfigExtractorService,
     IConfigService,
     IDeleteConfigService,
     IDomainManager,
     IReadConfigService,
     IUpdateConfigService,
+    IVercelAuthService,
     IVercelService,
     IWebsiteCloner,
     IWebsiteDeployer,
@@ -23,18 +25,17 @@ import {
     BuildService,
     CertsService,
     ConfigExtractorService,
+    ConfigService,
     DeleteConfigService,
     DomainManager,
     ReadConfigService,
     UpdateConfigService,
+    VercelAuthService,
     VercelService,
     WebsiteCloner,
     WebsiteDeployer,
     WriteConfigService
 } from "./services";
-import {ICertsService} from "./interfaces/vercel/ICertsService";
-import {ConfigService} from "./services/ConfigService";
-// import {ConfigService} from "./services/ConfigService";
 
 container.register<IWebsiteCloner>('IWebsiteCloner', {
     useClass: WebsiteCloner
@@ -72,6 +73,10 @@ container.register<IBuildService>("IBuildService", {
 
 container.register<ICertsService>("ICertsService", {
     useClass: CertsService,
+});
+
+container.register<IVercelAuthService>("IVercelAuthService", {
+    useClass: VercelAuthService,
 });
 
 // --------------------------------------------------------------------------------------------------------------------
