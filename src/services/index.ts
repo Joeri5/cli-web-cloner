@@ -5,5 +5,6 @@ export * from "./AxiosApiService";
 export * from "./ConfigExtractorService";
 export * from "./VercelService";
 export * from "./ConfigService";
+export * from "./VercelCommandService";
 export * from "./config/";
 export * from "./vercel/";
