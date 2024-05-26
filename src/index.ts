@@ -1,7 +1,11 @@
-import "reflect-metadat";
+#!/usr/bin/env node
+
+import "reflect-metadata";
 import {Command} from "commander";
 import {container} from "tsyringe";
-import {IDomainManager, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
+import {IDomainManager, IVercelService, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
+import "./container";
+
 
 const program = new Command();
 
@@ -9,6 +13,71 @@ program
     .name("web-clone-deployer")
     .description("CLI to clone, deploy websites and add domains")
     .version("1.0.0");
+
+
+const authCommand = program
+    .command('auth')
+    .description('Authenticate with Vercel');
+
+authCommand
+    .command('login')
+    .description('Login to Vercel account')
+    .argument('<email>', 'Email address to use for Vercel login')
+    .action(async (email: string) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+
+        if (await vercelService.auth.isAuthenticated())
+            return console.log("You are already logged in.");
+
+        try {
+            await vercelService.auth.login(email);
+        } catch (error) {
+            console.error("Error logging in. Please try again later.");
+        }
+    });
+
+authCommand
+    .command('logout')
+    .description('Logout from Vercel account')
+    .action(async () => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+
+        if (!await vercelService.auth.isAuthenticated())
+            return console.log("You are not logged in.");
+
+        try {
+            await vercelService.auth.logout();
+        } catch (error) {
+            console.error("Error logging out. Please try again later.");
+        }
+    });
+
+authCommand
+    .command('whoami')
+    .description('Check the currently authenticated user')
+    .action(async () => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+
+        if (!await vercelService.auth.isAuthenticated())
+            return console.log("You are not logged in.");
+
+        try {
+            await vercelService.auth.whoami();
+        } catch (error) {
+            console.error("Error checking user. Please try again later.");
+        }
+    });
+
+authCommand
+    .command('status')
+    .description('Check the authentication status')
+    .action(async () => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+
+        if (await vercelService.auth.isAuthenticated())
+            return console.log("You are logged in.");
+        console.log("You are not logged in.");
+    });
 
 program
     .command("clone")

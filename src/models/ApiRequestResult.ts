@@ -1,5 +1,5 @@
 export class ApiRequestResult {
     status?: number;
-    data?: any;
+    data?: any | any[];
     error?: any;
 }

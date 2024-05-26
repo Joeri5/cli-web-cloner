@@ -1,17 +1,20 @@
 {
-  "name": "cli-web-cloner",
+  "name": "cloner",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "CLI to clone, deploy websites and add domains",
+  "main": "dist/index.mjs",
+  "bin": {
+    "cloner": "dist/index.mjs"
+  },
   "scripts": {
+    "start": "ts-node src/index.ts",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run clean && npm run build",
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "devDependencies": {
+    "@types/inquirer": "^9.0.7",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.12",
     "axios": "^1.6.8",
@@ -25,6 +28,11 @@
     "vercel": "^34.2.0"
   },
   "dependencies": {
-    "reflect-metadata": "^0.2.2"
+    "cli-spinners": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "inquirer": "^9.2.22",
+    "log-update": "^6.0.0",
+    "reflect-metadata": "^0.2.2",
+    "shx": "^0.3.4"
   }
 }
