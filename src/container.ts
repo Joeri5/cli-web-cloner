@@ -10,9 +10,11 @@ import {
     IConfigService,
     IDeleteConfigService,
     IDomainManager,
+    IInitService,
     IReadConfigService,
     IUpdateConfigService,
     IVercelAuthService,
+    IVercelCommandService,
     IVercelService,
     IWebsiteCloner,
     IWebsiteDeployer,
@@ -28,9 +30,11 @@ import {
     ConfigService,
     DeleteConfigService,
     DomainManager,
+    InitService,
     ReadConfigService,
     UpdateConfigService,
     VercelAuthService,
+    VercelCommandService,
     VercelService,
     WebsiteCloner,
     WebsiteDeployer,
@@ -75,11 +79,21 @@ container.register<ICertsService>("ICertsService", {
     useClass: CertsService,
 });
 
+container.register<IInitService>("IInitService", {
+    useClass: InitService,
+});
+
 container.register<IVercelAuthService>("IVercelAuthService", {
     useClass: VercelAuthService,
 });
 
-// --------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
+
+container.register<IVercelCommandService>("IVercelCommandService", {
+    useClass: VercelCommandService,
+});
+
+//-------------------------------------------------------------------------------------------------------------------
 container.register<IConfigService>("IConfigService", {
     useClass: ConfigService,
 });

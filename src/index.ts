@@ -14,8 +14,21 @@ program
     .description("CLI to clone, deploy websites and add domains")
     .version("1.0.0");
 
+const vercelCommand = program
+    .command('vercel')
+    .description('Vercel related commands');
 
-const authCommand = program
+vercelCommand
+    .command('init')
+    .description('Initialize a new project')
+    .argument('<projectName>', 'Name of the project')
+    .action(async (projectName: string) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.init.init(projectName);
+    });
+
+
+const authCommand = vercelCommand
     .command('auth')
     .description('Authenticate with Vercel');
 
