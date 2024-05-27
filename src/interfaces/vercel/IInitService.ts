@@ -1,5 +1,5 @@
 import {IInitOptions} from "./options/init";
 
 export interface IInitService {
-    init(projectName: string, options?: IInitOptions): Promise<void>;
+    init(projectName: string, framework?: string, options?: IInitOptions): Promise<void>;
 }

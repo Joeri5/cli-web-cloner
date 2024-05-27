@@ -8,7 +8,7 @@ export class VercelAuthService implements IVercelAuthService {
     }
 
     async login(email: string): Promise<void> {
-        const loaderInterval = createDotLoader("Email verification in progress. Please check your inbox and spam folder. \n");
+        const loaderInterval = createDotLoader("Email verification in progress. Please check your inbox and spam folder.");
 
         try {
             const response = await this.apiService.post("https://api.vercel.com/v2/registration?mode=login", {

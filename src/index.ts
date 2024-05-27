@@ -3,8 +3,9 @@
 import "reflect-metadata";
 import {Command} from "commander";
 import {container} from "tsyringe";
-import {IDomainManager, IVercelService, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
+import {IApiService, IDomainManager, IVercelService, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
 import "./container";
+import select from "@inquirer/select";
 
 
 const program = new Command();
@@ -22,9 +23,23 @@ vercelCommand
     .command('init')
     .description('Initialize a new project')
     .argument('<projectName>', 'Name of the project')
-    .action(async (projectName: string) => {
+    .option('-f, --framework <type>', 'Framework to use')
+    .action(async (projectName: string, options: Record<string, string>) => {
         const vercelService = container.resolve<IVercelService>("IVercelService");
-        await vercelService.init.init(projectName);
+        const apiClient = container.resolve<IApiService>("IApiService");
+
+        let exampleList = await apiClient.get('https://now-example-files.zeit.sh/v2/list.json');
+
+        if (options.framework)
+            await vercelService.init.init(projectName, options.framework);
+        else {
+            select({
+                message: 'Select a framework',
+                choices: exampleList.data
+            }).then(async (answer: any) => {
+                await vercelService.init.init(projectName, answer);
+            });
+        }
     });
 
 

@@ -34,7 +34,7 @@ export class ConfigExtractorService implements IConfigExtractorService {
         }
 
         if (Object.keys(result).length === 0) {
-            throw new Error(`Child section [${child}] not found in the config file.`);
+            console.error(`Child section [${child}] not found in the config file.`);
         }
 
         return result;
@@ -45,7 +45,7 @@ export class ConfigExtractorService implements IConfigExtractorService {
         const value = childConfig[key];
 
         if (!value) {
-            throw new Error(`Key ${key} not found in the config file.`);
+            console.error(`Key ${key} not found in the config file.`);
         }
 
         return value;
