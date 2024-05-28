@@ -7,7 +7,25 @@ class BisectService implements IBisectService {
     }
 
     async bisect(options?: IBisectOptions): Promise<void> {
-        return this.vercelCommandService.execute('bisect', options);
+        let bisectOptions = "";
+
+        if (options?.good)
+            bisectOptions += ` --good ${options.good} `;
+
+        if (options?.bad)
+            bisectOptions += ` --bad ${options.bad} `;
+
+        if (options?.path)
+            bisectOptions += ` --path ${options.path} `;
+
+        if (options?.open)
+            bisectOptions += ` --open `;
+
+        if (options?.run)
+            bisectOptions += ` --run ${options.run} `;
+
+
+        return this.vercelCommandService.execute('bisect', options, bisectOptions);
     }
 }
 

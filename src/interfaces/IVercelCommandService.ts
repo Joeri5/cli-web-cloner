@@ -1,5 +1,5 @@
 import {IGlobalOptions} from "./vercel";
 
 export interface IVercelCommandService {
-    execute(command: string, options?: IGlobalOptions): Promise<void>;
+    execute(command: string, globalOptions?: IGlobalOptions, options?: string): Promise<void>;
 }

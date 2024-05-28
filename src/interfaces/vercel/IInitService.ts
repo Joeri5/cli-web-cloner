@@ -1,4 +1,4 @@
-import {IInitOptions} from "./options/init";
+import {IInitOptions} from "./options";
 
 export interface IInitService {
     init(projectName: string, framework?: string, options?: IInitOptions): Promise<void>;

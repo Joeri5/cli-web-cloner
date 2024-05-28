@@ -4,3 +4,4 @@ export * from "./BuildService";
 export * from "./CertsService";
 export * from "./VercelAuthService";
 export * from "./InitService";
+export * from "./LinkService";

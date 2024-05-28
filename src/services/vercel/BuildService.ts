@@ -7,7 +7,15 @@ class BuildService implements IBuildService {
     }
 
     async build(options?: IBuildOptions): Promise<void> {
-        return this.vercelCommandService.execute('build', options);
+        let buildOptions = "";
+
+        if (options?.prod)
+            buildOptions += " --prod ";
+
+        if (options?.yes)
+            buildOptions += " --yes ";
+
+        return this.vercelCommandService.execute('build', options, buildOptions);
     }
 }
 

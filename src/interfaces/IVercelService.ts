@@ -1,4 +1,15 @@
-import {IAliasService, IBisectService, IBuildService, ICertsService, IInitService, IVercelAuthService} from "./vercel";
+import {
+    IAliasService,
+    IBisectService,
+    IBuildService,
+    ICertsService,
+    IDeployService,
+    IInitService,
+    ILinkService,
+    IProjectService,
+    IPullService,
+    IVercelAuthService
+} from "./vercel";
 
 export interface IVercelService {
     // alias
@@ -24,4 +35,20 @@ export interface IVercelService {
     // init
     // initialize a new vercel project
     init: IInitService;
+
+    // project
+    // manage projects on vercel
+    project: IProjectService;
+
+    // link
+    // link a local project with a vercel project
+    link: ILinkService;
+
+    // pull
+    // pull a vercel project to your local machine
+    pull: IPullService;
+
+    // deploy
+    // deploy a vercel project
+    deploy: IDeployService;
 }
