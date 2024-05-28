@@ -9,8 +9,12 @@ import {
     IConfigExtractorService,
     IConfigService,
     IDeleteConfigService,
+    IDeployService,
     IDomainManager,
     IInitService,
+    ILinkService,
+    IProjectService,
+    IPullService,
     IReadConfigService,
     IUpdateConfigService,
     IVercelAuthService,
@@ -31,6 +35,7 @@ import {
     DeleteConfigService,
     DomainManager,
     InitService,
+    LinkService,
     ReadConfigService,
     UpdateConfigService,
     VercelAuthService,
@@ -40,6 +45,9 @@ import {
     WebsiteDeployer,
     WriteConfigService
 } from "./services";
+import {ProjectService} from "./services/vercel/ProjectService";
+import {PullService} from "./services/vercel/PullService";
+import {DeployService} from "./services/vercel/DeployService";
 
 container.register<IWebsiteCloner>('IWebsiteCloner', {
     useClass: WebsiteCloner
@@ -81,6 +89,22 @@ container.register<ICertsService>("ICertsService", {
 
 container.register<IInitService>("IInitService", {
     useClass: InitService,
+});
+
+container.register<IProjectService>("IProjectService", {
+    useClass: ProjectService,
+});
+
+container.register<ILinkService>("ILinkService", {
+    useClass: LinkService,
+});
+
+container.register<IPullService>("IPullService", {
+    useClass: PullService,
+});
+
+container.register<IDeployService>("IDeployService", {
+    useClass: DeployService,
 });
 
 container.register<IVercelAuthService>("IVercelAuthService", {

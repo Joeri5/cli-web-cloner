@@ -8,7 +8,7 @@ export class VercelCommandService implements IVercelCommandService {
     constructor(@inject('IConfigService') private configService: IConfigService) {
     }
 
-    async execute(command: string, options?: IGlobalOptions): Promise<void> {
+    async execute(command: string, globalOptions?: IGlobalOptions, options?: string): Promise<void> {
         const token = await this.configService.readConfig.readKeyFromChild('auth', 'token');
 
         if (!token)
@@ -17,9 +17,11 @@ export class VercelCommandService implements IVercelCommandService {
         return new Promise((resolve, reject) => {
             const commandParts = ['vercel', command];
 
-            appendGlobalOptions(commandParts, options)
+            appendGlobalOptions(commandParts, globalOptions)
 
-            const executableCommand = commandParts.join(' ') + ` --token ${token}`;
+            const executableCommand = commandParts.join(' ') + ` ${options || ""}` + ` --token ${token}`;
+
+            console.log(`Executing command: ${executableCommand}`);
 
             exec(executableCommand, (error, stdout, stderr) => {
                 if (error) {

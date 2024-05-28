@@ -7,11 +7,11 @@ export class CertsService implements ICertsService {
     }
 
     async list(options?: ICertsListOptions): Promise<void> {
-        return this.vercelCommandService.execute('certs ls', options);
+        return this.vercelCommandService.execute('certs ls', options, options?.limit && `--limit ${options.limit}` || "");
     }
 
     async issue(domain: string | Array<string>, options?: ICertsIssueOptions): Promise<void> {
-        return this.vercelCommandService.execute(`certs issue ${domain}`, options);
+        return this.vercelCommandService.execute(`certs issue ${domain}`, options, options?.challengeOnly && `--challenge-only` || "");
     }
 
     async remove(uid: Array<string>): Promise<void> {

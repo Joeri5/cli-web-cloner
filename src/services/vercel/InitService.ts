@@ -8,6 +8,6 @@ export class InitService implements IInitService {
     }
 
     init(projectName: string, framework?: string, options?: IInitOptions): Promise<void> {
-        return this.vercelCommandService.execute(`init ${framework} ${projectName}`, options);
+        return this.vercelCommandService.execute(`init ${framework} ${projectName}`, options, options?.force && "--force" || "");
     }
 }

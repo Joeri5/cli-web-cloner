@@ -17,11 +17,11 @@ class AliasService implements IAliasService {
     }
 
     async remove(customDomain: string, options?: IAliasRemoveOptions): Promise<void> {
-        return this.vercelCommandService.execute(`alias rm ${customDomain}`, options);
+        return this.vercelCommandService.execute(`alias rm ${customDomain}`, options, options?.yes && '-y' || '');
     }
 
     async list(options?: IAliasListOptions): Promise<void> {
-        return this.vercelCommandService.execute('alias ls', options);
+        return this.vercelCommandService.execute('alias ls', options, options?.limit && `--limit ${options.limit}` || '');
     }
 }
 

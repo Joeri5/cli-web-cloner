@@ -3,7 +3,15 @@
 import "reflect-metadata";
 import {Command} from "commander";
 import {container} from "tsyringe";
-import {IApiService, IDomainManager, IVercelService, IWebsiteCloner, IWebsiteDeployer} from "./interfaces";
+import {
+    IApiService,
+    IBuildOptions,
+    IDeployService,
+    IDomainManager,
+    IProjectService,
+    IVercelService,
+    IWebsiteDeployer
+} from "./interfaces";
 import "./container";
 import select from "@inquirer/select";
 
@@ -15,11 +23,7 @@ program
     .description("CLI to clone, deploy websites and add domains")
     .version("1.0.0");
 
-const vercelCommand = program
-    .command('vercel')
-    .description('Vercel related commands');
-
-vercelCommand
+program
     .command('init')
     .description('Initialize a new project')
     .argument('<projectName>', 'Name of the project')
@@ -33,17 +37,66 @@ vercelCommand
         if (options.framework)
             await vercelService.init.init(projectName, options.framework);
         else {
-            select({
-                message: 'Select a framework',
-                choices: exampleList.data
-            }).then(async (answer: any) => {
-                await vercelService.init.init(projectName, answer);
+            let choices = exampleList.data.map((example: any) => {
+                return {
+                    name: example.name,
+                    value: example.name,
+                    description: example.description,
+                }
             });
+
+            const answer: string = await select({
+                message: 'Select a framework',
+                choices: choices,
+            });
+
+            await vercelService.init.init(projectName, answer);
         }
     });
 
+program
+    .command('link')
+    .description('Link a project')
+    .option('-y, --yes', 'Skip confirmation')
+    .option('-p, --project <name>', 'Project name')
+    .action(async (options: any) => {
+        console.log(options);
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.link.link(options);
+    });
 
-const authCommand = vercelCommand
+program
+    .command('list')
+    .description('List projects')
+    .option('-u, --updateRequired', 'Update the list')
+    .action(async (options: any) => {
+        console.log(options);
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.project.list(options);
+    });
+
+program
+    .command('build')
+    .description('Build the project')
+    .option('-p, --production', 'Build for production')
+    .option('-y, --yes', 'Skip confirmation')
+    .action(async (options: IBuildOptions) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.build.build(options);
+    });
+
+program
+    .command('pull')
+    .description('Pull the project')
+    .option('-e, --environment <name>', 'Environment name')
+    .option('-g, --gitBranch <name>', 'Git branch name')
+    .option('-y, --yes', 'Skip confirmation')
+    .action(async (options: any) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.pull.pull(options);
+    });
+
+const authCommand = program
     .command('auth')
     .description('Authenticate with Vercel');
 
@@ -110,11 +163,31 @@ authCommand
 program
     .command("clone")
     .description("Clone a website")
-    .argument('<sourceUrl>', "URL of the website to clone")
-    .argument('<destDir>', "Destination directory for the cloned website")
-    .action(async (sourceUrl: string, destDir: string) => {
-        const cloner = container.resolve<IWebsiteCloner>("IWebsiteCloner");
-        await cloner.clone(sourceUrl, destDir);
+    .argument('<projectName>', "Name of the project")
+    .action(async (projectName: string) => {
+        const projectService = container.resolve<IProjectService>("IProjectService");
+        const deployerService = container.resolve<IDeployService>("IDeployService");
+
+        const projects = await projectService.get(projectName).then((result) => result.data);
+        if (!projects)
+            await deployerService.deploy({yes: true, prod: true});
+
+        else {
+            console.log("Project already exists. Do you want to overwrite it?");
+            const answer = await select({
+                message: 'Select an option',
+                choices: [
+                    {name: 'Yes', value: 'yes'},
+                    {name: 'No', value: 'no'},
+                ],
+            });
+
+            if (answer === 'yes')
+                await deployerService.deploy({yes: true, prod: true});
+        }
+
+        const allProjects = await projectService.get().then((result) => result.data);
+        console.log(allProjects?.projects[0]?.targets?.production?.alias[0]);
     });
 
 program

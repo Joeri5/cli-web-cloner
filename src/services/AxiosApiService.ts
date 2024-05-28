@@ -1,14 +1,15 @@
 import axios, {AxiosRequestConfig} from "axios";
 import {ApiRequestResult} from "../models";
-import {IApiService} from "../interfaces";
-import {injectable} from "tsyringe";
-
-const bearerToken = (typeof window !== 'undefined' && window.localStorage.getItem("bearerToken")) ?? process.env.AUTH_TOKEN;
+import {IApiService, IConfigService} from "../interfaces";
+import {inject, injectable} from "tsyringe";
 
 @injectable()
 class AxiosApiService implements IApiService {
+    constructor(@inject('IConfigService') private configService: IConfigService) {
+    }
 
-    private getConfig(directives: any): AxiosRequestConfig<any> {
+    private async getConfig(directives: any): Promise<AxiosRequestConfig<any>> {
+        const bearerToken = await this.configService.readConfig.readKeyFromChild('auth', 'token');
         return <AxiosRequestConfig<any>>{
             timeout: 10000 ?? directives.timeout,
             headers: bearerToken ? {
@@ -21,7 +22,7 @@ class AxiosApiService implements IApiService {
         try {
             const axiosResult = await axios.get(
                 url,
-                this.getConfig(directives)
+                await this.getConfig(directives)
             );
             return <ApiRequestResult>{
                 status: axiosResult.status,
@@ -34,32 +35,32 @@ class AxiosApiService implements IApiService {
         }
     }
 
-    post(url: string, data?: any, directives?: any): Promise<ApiRequestResult> {
+    async post(url: string, data?: any, directives?: any): Promise<ApiRequestResult> {
         return axios.post(
             url,
             data,
-            this.getConfig(directives)
+            await this.getConfig(directives)
         );
     }
 
-    put(url: string, data: any, directives?: any): Promise<ApiRequestResult> {
+    async put(url: string, data: any, directives?: any): Promise<ApiRequestResult> {
         return axios.put(
             url,
             data,
-            this.getConfig(directives)
+            await this.getConfig(directives)
         );
     }
 
-    patch(url: string, data: any, directives?: any): Promise<ApiRequestResult> {
+    async patch(url: string, data: any, directives?: any): Promise<ApiRequestResult> {
         return axios.patch(
             url,
             data,
-            this.getConfig(directives)
+            await this.getConfig(directives)
         );
     }
 
-    delete(url: string, directives?: any): Promise<ApiRequestResult> {
-        return axios.delete(url, this.getConfig(directives));
+    async delete(url: string, directives?: any): Promise<ApiRequestResult> {
+        return axios.delete(url, await this.getConfig(directives));
     }
 }
 

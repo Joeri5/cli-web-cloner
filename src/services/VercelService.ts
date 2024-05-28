@@ -3,7 +3,11 @@ import {
     IBisectService,
     IBuildService,
     ICertsService,
+    IDeployService,
     IInitService,
+    ILinkService,
+    IProjectService,
+    IPullService,
     IVercelAuthService,
     IVercelService
 } from "../interfaces";
@@ -18,6 +22,10 @@ export class VercelService implements IVercelService {
         @inject("ICertsService") public certs: ICertsService,
         @inject("IVercelAuthService") public auth: IVercelAuthService,
         @inject("IInitService") public init: IInitService,
+        @inject("IProjectService") public project: IProjectService,
+        @inject("ILinkService") public link: ILinkService,
+        @inject("IPullService") public pull: IPullService,
+        @inject("IDeployService") public deploy: IDeployService,
     ) {
     }
 }
