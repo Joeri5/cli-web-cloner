@@ -1,10 +1,10 @@
 {
   "name": "cloner",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "CLI to clone, deploy websites and add domains",
-  "main": "dist/index.mjs",
+  "main": "dist/index.js",
   "bin": {
-    "cloner": "dist/index.mjs"
+    "cloner": "dist/index.js"
   },
   "scripts": {
     "start": "ts-node src/index.ts",
@@ -30,10 +30,16 @@
   "dependencies": {
     "@inquirer/select": "^2.3.4",
     "cli-spinners": "^3.0.0",
+    "cloner": "^2.0.0",
     "dotenv": "^16.4.5",
     "inquirer": "^9.2.22",
     "log-update": "^6.0.0",
     "reflect-metadata": "^0.2.2",
     "shx": "^0.3.4"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "author": "",
+  "license": "ISC"
 }
