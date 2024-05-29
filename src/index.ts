@@ -24,6 +24,13 @@ program
     .version("1.0.0");
 
 program
+    .command('test')
+    .description('Test the CLI')
+    .action(() => {
+        console.log("Test successful");
+    });
+
+program
     .command('init')
     .description('Initialize a new project')
     .argument('<projectName>', 'Name of the project')
@@ -186,8 +193,8 @@ program
                 await deployerService.deploy({yes: true, prod: true});
         }
 
-        const allProjects = await projectService.get().then((result) => result.data);
-        console.log(allProjects?.projects[0]?.targets?.production?.alias[0]);
+        // const allProjects = await projectService.get().then((result) => result.data);
+        // console.log(allProjects?.projects[0]?.targets?.production?.alias[0]);
     });
 
 program
