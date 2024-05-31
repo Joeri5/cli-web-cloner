@@ -7,12 +7,10 @@ import {
     IApiService,
     IBuildOptions,
     IDeployService,
-    IDomainManager,
     IDomainService,
     IProjectService,
     ITransipService,
     IVercelService,
-    IWebsiteDeployer
 } from "./interfaces";
 import "./container";
 import select from "@inquirer/select";
@@ -202,25 +200,6 @@ program
         console.log('https://' + allProjects?.projects[0]?.targets?.production?.alias[0]);
     });
 
-program
-    .command("deploy")
-    .description("Deploy the cloned website")
-    .argument('<sourceDir>', "Source directory of the cloned website")
-    .action((sourceDir: string) => {
-        const deployer = container.resolve<IWebsiteDeployer>("IWebsiteDeployer");
-        deployer.deploy(sourceDir);
-    });
-
-program
-    .command("add-domain")
-    .description("Add a domain to the deployed website")
-    .argument('<projectId>', "Vercel project ID")
-    .argument('<domain>', "Domain to add")
-    .action((projectId: string, domain: string) => {
-        const manager = container.resolve<IDomainManager>("IDomainManager");
-        manager.addDomain(projectId, domain);
-    });
-
 const transipCommand = program
     .command('transip')
     .description("Transip commands");
@@ -294,6 +273,126 @@ domainCommand
     .action(async (domain: string) => {
         const domainService = container.resolve<IDomainService>("IDomainService");
         await domainService.checkDomain(domain);
+    });
+
+domainCommand
+    .command('list')
+    .description('List domains')
+    .option('-v, --vercel', 'List Vercel domains')
+    .option('-t --transip', 'List Transip domains')
+    .option('-a --all', 'List all domains')
+    .action(async (options: any) => {
+        const domainService = container.resolve<IDomainService>("IDomainService");
+        if (options.vercel)
+            await domainService.listVercelDomains();
+        else if (options.transip)
+            await domainService.listTransipDomains();
+        else if (options.all)
+            await domainService.listAllDomains();
+    });
+
+domainCommand
+    .command('buy')
+    .description('Buy a domain')
+    .argument('<domain>', 'Domain to buy')
+    .action(async (domain: string, options: any) => {
+        const domainService = container.resolve<IDomainService>("IDomainService");
+        await domainService.checkDomain(domain);
+
+        const answer = await select({
+            message: 'Do you want to buy this domain?',
+            choices: [
+                {name: 'Yes', value: 'yes'},
+                {name: 'No', value: 'no'},
+            ],
+        });
+
+        if (answer === 'yes') {
+
+            const dnsAnswer = await select({
+                message: 'Do you want to add Vercel DNS records for this domain?',
+                choices: [
+                    {name: 'Yes', value: 'yes'},
+                    {name: 'No', value: 'no'},
+                ],
+            });
+
+            if (dnsAnswer === 'yes')
+                await domainService.buyDomain(domain, true);
+            else
+                await domainService.buyDomain(domain, false);
+        }
+    });
+
+const vercelDomainCommand = domainCommand
+    .command('vercel')
+    .description('Vercel domain commands');
+
+vercelDomainCommand
+    .command('add')
+    .description('Add a domain to a project')
+    .argument('<domain>', 'Domain to add')
+    .argument('<project>', 'Project to add domain to')
+    .option('-f, --force', 'Force the addition of the domain')
+    .action(async (domain: string, project: string, options: any) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.domains.add(domain, project, options);
+    });
+
+vercelDomainCommand
+    .command('buy')
+    .description('Buy a domain')
+    .argument('<domain>', 'Domain to buy')
+    .action(async (domain: string, options: any) => {
+        const domainService = container.resolve<IDomainService>("IDomainService");
+        await domainService.buyDomain(domain, true);
+    });
+
+vercelDomainCommand
+    .command('inspect')
+    .description('Inspect a domain')
+    .argument('<domain>', 'Domain to inspect')
+    .action(async (domain: string, options: any) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.domains.inspect(domain, options);
+    });
+
+vercelDomainCommand
+    .command('list')
+    .description('List domains')
+    .option('-l, --limit <number>', 'Limit the number of domains')
+    .action(async (options: any) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.domains.list(options);
+    });
+
+vercelDomainCommand
+    .command('move')
+    .description('Move a domain')
+    .argument('<domain>', 'Domain to move')
+    .argument('<scopeName>', 'Scope name')
+    .action(async (domain: string, scopeName: string, options: any) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.domains.move(domain, scopeName, options);
+    });
+
+vercelDomainCommand
+    .command('remove')
+    .description('Remove a domain')
+    .argument('<domain>', 'Domain to remove')
+    .option('-y, --yes', 'Skip confirmation')
+    .action(async (domain: string, options: any) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.domains.remove(domain, options);
+    });
+
+vercelDomainCommand
+    .command('transfer')
+    .description('Transfer a domain')
+    .argument('<domain>', 'Domain to transfer')
+    .action(async (domain: string, options: any) => {
+        const vercelService = container.resolve<IVercelService>("IVercelService");
+        await vercelService.domains.transfer(domain, options);
     });
 
 program.parse(process.argv);

@@ -8,7 +8,8 @@ import {
     ILinkService,
     IProjectService,
     IPullService,
-    IVercelAuthService
+    IVercelAuthService,
+    IVercelDomainsService
 } from "./vercel";
 
 export interface IVercelService {
@@ -51,4 +52,8 @@ export interface IVercelService {
     // deploy
     // deploy a vercel project
     deploy: IDeployService;
+
+    // domains
+    // manage domains on vercel
+    domains: IVercelDomainsService;
 }

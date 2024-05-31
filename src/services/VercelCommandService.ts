@@ -12,8 +12,8 @@ export class VercelCommandService implements IVercelCommandService {
         if (!await this.vercelAuthService.isAuthenticated())
             console.error('No token found in config file, please login first.');
 
-        return new Promise((resolve, reject) => {
-            const token = this.configService.readConfig.readKeyFromChild('vercel', 'token');
+        return new Promise(async (resolve, reject) => {
+            const token = await this.configService.readConfig.readKeyFromChild('vercel', 'token');
             const commandParts = ['vercel', command];
 
             appendGlobalOptions(commandParts, globalOptions)

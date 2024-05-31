@@ -8,3 +8,4 @@ export * from "./PullService";
 export * from "./InitService";
 export * from "./LinkService";
 export * from "./ProjectService";
+export * from "./VercelDomainsService";

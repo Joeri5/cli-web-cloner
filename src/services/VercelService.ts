@@ -9,6 +9,7 @@ import {
     IProjectService,
     IPullService,
     IVercelAuthService,
+    IVercelDomainsService,
     IVercelService
 } from "../interfaces";
 import {inject, injectable} from "tsyringe";
@@ -26,6 +27,7 @@ export class VercelService implements IVercelService {
         @inject("ILinkService") public link: ILinkService,
         @inject("IPullService") public pull: IPullService,
         @inject("IDeployService") public deploy: IDeployService,
+        @inject("IVercelDomainsService") public domains: IVercelDomainsService
     ) {
     }
 }

@@ -8,3 +8,4 @@ export * from "./pull";
 export * from "./link";
 export * from "./init";
 export * from "./deploy";
+export * from "./domains";

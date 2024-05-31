@@ -2,7 +2,7 @@
 
 # Define the package version
 PACKAGE_NAME="cli-web-cloner-cloner"
-PACKAGE_VERSION="1.1.0"
+PACKAGE_VERSION="1.1.1"
 PACKAGE_TGZ="${PACKAGE_NAME}-${PACKAGE_VERSION}.tgz"
 
 # Build the project

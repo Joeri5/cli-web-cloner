@@ -10,7 +10,6 @@ import {
     IConfigService,
     IDeleteConfigService,
     IDeployService,
-    IDomainManager,
     IDomainService,
     IInitService,
     ILinkService,
@@ -21,9 +20,8 @@ import {
     IUpdateConfigService,
     IVercelAuthService,
     IVercelCommandService,
+    IVercelDomainsService,
     IVercelService,
-    IWebsiteCloner,
-    IWebsiteDeployer,
     IWriteConfigService
 } from "./interfaces";
 import {
@@ -36,7 +34,6 @@ import {
     ConfigService,
     DeleteConfigService,
     DeployService,
-    DomainManager,
     DomainService,
     InitService,
     LinkService,
@@ -47,23 +44,10 @@ import {
     UpdateConfigService,
     VercelAuthService,
     VercelCommandService,
+    VercelDomainsService,
     VercelService,
-    WebsiteCloner,
-    WebsiteDeployer,
     WriteConfigService
 } from "./services";
-
-container.register<IWebsiteCloner>('IWebsiteCloner', {
-    useClass: WebsiteCloner
-});
-
-container.register<IWebsiteDeployer>('IWebsiteDeployer', {
-    useClass: WebsiteDeployer
-});
-
-container.register<IDomainManager>('IDomainManager', {
-    useClass: DomainManager
-});
 
 container.register<IApiService>("IApiService", {
     useClass: AxiosApiService,
@@ -109,6 +93,10 @@ container.register<IPullService>("IPullService", {
 
 container.register<IDeployService>("IDeployService", {
     useClass: DeployService,
+});
+
+container.register<IVercelDomainsService>("IVercelDomainsService", {
+    useClass: VercelDomainsService,
 });
 
 container.register<IVercelAuthService>("IVercelAuthService", {

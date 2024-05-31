@@ -1,11 +1,11 @@
 export interface IDomainService {
-    buyDomain(domain: string): Promise<void>;
+    buyDomain(domain: string, vercelDns: boolean): Promise<void>;
 
     checkDomain(domain: string): Promise<void>;
 
-    listTransipDomains(vercel: boolean, transip: boolean, all: boolean): Promise<void>;
+    listTransipDomains(): Promise<void>;
 
-    listVercelDomains(vercel: boolean, transip: boolean, all: boolean): Promise<void>;
+    listVercelDomains(): Promise<void>;
 
-    listAllDomains(vercel: boolean, transip: boolean, all: boolean): Promise<void>;
+    listAllDomains(): Promise<void>;
 }

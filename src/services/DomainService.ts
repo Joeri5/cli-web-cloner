@@ -9,8 +9,26 @@ export class DomainService implements IDomainService {
     private transipToken = this.configService.readConfig.readKeyFromChild('transip', 'token');
     private vercelToken = this.configService.readConfig.readKeyFromChild('vercel', 'token');
 
-    async buyDomain(domain: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async buyDomain(domain: string, vercelDns: boolean): Promise<void> {
+        const nameServerData = {
+            domainName: domain,
+            nameservers: [
+                {
+                    hostname: 'ns1.vercel-dns.com',
+                    ipv4: '',
+                    ipv6: ''
+                },
+                {
+                    hostname: 'ns2.vercel-dns.com',
+                    ipv4: '',
+                    ipv6: ''
+                }
+            ]
+        };
+        const data = vercelDns ? nameServerData : {domainName: domain};
+        await this.apiService.post(`https://api.transip.nl/v6/domains`, data, await this.transipToken)
+            .then(() => console.log(`Domain ${domain} bought`))
+            .catch((e) => console.error(`Error buying domain ${domain}: ${e.message}`));
     }
 
     async checkDomain(domain: string): Promise<void> {
@@ -28,18 +46,18 @@ export class DomainService implements IDomainService {
         }
     }
 
-    async listTransipDomains(vercel: boolean, transip: boolean, all: boolean): Promise<void> {
-        // get javascript timestamp in seconds
-        const now = Math.floor(Date.now() / 1000);
-        // get all domains
-        const domains = await this.apiService.get(`https://api.transip.nl/v6/domain?until=${now}`, await this.transipToken).then((r) => r.data.domains);
+    async listTransipDomains(): Promise<void> {
+        console.log(await this.apiService.get(`https://api.transip.nl/v6/domains`, await this.transipToken).then((r) => r.data.domains.map((d: any) => d.name)));
     }
 
-    async listVercelDomains(vercel: boolean, transip: boolean, all: boolean): Promise<void> {
-        throw new Error("Method not implemented.");
+    async listVercelDomains(): Promise<void> {
+        console.log(await this.apiService.get(`https://api.vercel.com/v5/domains`, await this.vercelToken).then((r) => r.data.domains.map((d: any) => d.name)));
     }
 
-    async listAllDomains(vercel: boolean, transip: boolean, all: boolean): Promise<void> {
-        throw new Error("Method not implemented.");
+    async listAllDomains(): Promise<void> {
+        console.log('Transip domains:');
+        await this.listTransipDomains();
+        console.log('Vercel domains:');
+        await this.listVercelDomains();
     }
 }
