@@ -1,5 +1,4 @@
-import {ILinkService, IVercelCommandService} from "../../interfaces";
-import {ILinkOptions} from "../../interfaces/vercel/options/link";
+import {ILinkOptions, ILinkService, IVercelCommandService} from "../../interfaces";
 import {inject, injectable} from "tsyringe";
 
 @injectable()

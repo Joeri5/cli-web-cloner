@@ -1,20 +1,19 @@
-import {IConfigService, IGlobalOptions, IVercelCommandService} from "../interfaces";
+import {IConfigService, IGlobalOptions, IVercelAuthService, IVercelCommandService} from "../interfaces";
 import {appendGlobalOptions} from "../utility";
 import {exec} from "child_process";
 import {inject, injectable} from "tsyringe";
 
 @injectable()
 export class VercelCommandService implements IVercelCommandService {
-    constructor(@inject('IConfigService') private configService: IConfigService) {
+    constructor(@inject('IConfigService') private configService: IConfigService, @inject('IVercelAuthService') private vercelAuthService: IVercelAuthService) {
     }
 
     async execute(command: string, globalOptions?: IGlobalOptions, options?: string): Promise<void> {
-        const token = await this.configService.readConfig.readKeyFromChild('auth', 'token');
-
-        if (!token)
+        if (!await this.vercelAuthService.isAuthenticated())
             console.error('No token found in config file, please login first.');
 
         return new Promise((resolve, reject) => {
+            const token = this.configService.readConfig.readKeyFromChild('vercel', 'token');
             const commandParts = ['vercel', command];
 
             appendGlobalOptions(commandParts, globalOptions)

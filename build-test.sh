@@ -2,16 +2,8 @@
 
 # Define the package version
 PACKAGE_NAME="cli-web-cloner-cloner"
-PACKAGE_VERSION="1.0.9"
+PACKAGE_VERSION="1.1.0"
 PACKAGE_TGZ="${PACKAGE_NAME}-${PACKAGE_VERSION}.tgz"
-
-# Remove the node_modules directory
-echo "Removing node_modules..."
-rm -rf node_modules
-
-# Install dependencies
-echo "Installing dependencies..."
-npm install
 
 # Build the project
 echo "Building the project..."
@@ -24,10 +16,3 @@ npm pack
 # Install the package globally
 echo "Installing the package globally..."
 npm install -g $PACKAGE_TGZ
-
-# Test the package
-echo "Running test..."
-cloner test
-
-# End of script
-echo "Script execution completed."

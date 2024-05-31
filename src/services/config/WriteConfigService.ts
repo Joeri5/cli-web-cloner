@@ -9,15 +9,11 @@ export class WriteConfigService implements IWriteConfigService {
     async write(child: string, data: Record<string, string>): Promise<void> {
         let configContent: string | Buffer;
 
-        try {
-            configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
-        } catch (e) {
-            throw new Error('Config file not found.');
-        }
+        configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
 
         const childExists = configContent.includes(`[${child}]`);
         if (childExists) {
-            throw new Error(`Child section [${child}] already exists in the config file.`);
+            process.exit(1)
         }
 
         const newChildContent = `\n\n[${child}]\n${Object.entries(data)

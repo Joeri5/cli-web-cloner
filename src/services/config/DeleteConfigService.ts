@@ -11,13 +11,7 @@ export class DeleteConfigService implements IDeleteConfigService {
     }
 
     async deleteChild(child: string): Promise<void> {
-        let configContent: string | Buffer;
-
-        try {
-            configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
-        } catch (error) {
-            throw new Error('Config file not found');
-        }
+        const configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
 
         const lines = configContent.split('\n');
         const updatedLines: string[] = [];
@@ -39,21 +33,13 @@ export class DeleteConfigService implements IDeleteConfigService {
             }
         }
 
-        if (configContent === updatedLines.join('\n')) {
-            throw new Error(`Child section [${child}] not found in the config file.`);
-        }
-
         fs.writeFileSync(path.join(getRootDir(), '.clonerConfig'), updatedLines.join('\n'), 'utf-8');
     }
 
     async deleteKeyFromChild(child: string, key: string): Promise<void> {
         let configContent: string | Buffer;
 
-        try {
-            configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
-        } catch (error) {
-            throw new Error('Config file not found.');
-        }
+        configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
 
         const lines = configContent.split('\n');
         const updatedLines: string[] = [];
@@ -83,10 +69,6 @@ export class DeleteConfigService implements IDeleteConfigService {
             if (inTargetChild && trimmedLine === '') {
                 inTargetChild = false;
             }
-        }
-
-        if (!keyDeleted) {
-            throw new Error(`Key [${key}] not found in child section [${child}]`);
         }
 
         fs.writeFileSync(path.join(getRootDir(), '.clonerConfig'), updatedLines.join('\n'), 'utf-8');

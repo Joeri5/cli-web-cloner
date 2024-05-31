@@ -7,7 +7,13 @@ import path from "path";
 @injectable()
 export class ConfigExtractorService implements IConfigExtractorService {
     async extract(): Promise<string> {
-        return fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf8');
+        const configPath = path.join(getRootDir(), '.clonerConfig');
+
+        if (!fs.existsSync(configPath)) {
+            fs.writeFileSync(configPath, '');
+        }
+
+        return fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf8')
     }
 
     async extractChild(child: string): Promise<Record<string, string>> {
@@ -33,21 +39,11 @@ export class ConfigExtractorService implements IConfigExtractorService {
             }
         }
 
-        if (Object.keys(result).length === 0) {
-            console.error(`Child section [${child}] not found in the config file.`);
-        }
-
         return result;
     }
 
     async extractKeyFromChild(child: string, key: string): Promise<string> {
         const childConfig = await this.extractChild(child);
-        const value = childConfig[key];
-
-        if (!value) {
-            console.error(`Key ${key} not found in the config file.`);
-        }
-
-        return value;
+        return childConfig[key];
     }
 }

@@ -9,11 +9,7 @@ export class UpdateConfigService implements IUpdateConfigService {
     async updateChild(child: string, data: Record<string, string>): Promise<void> {
         let configContent: string | Buffer;
 
-        try {
-            configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
-        } catch (e) {
-            throw new Error('Config file not found.');
-        }
+        configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
 
         const lines = configContent.split('\n');
         const updatedLines: string[] = [];
@@ -48,11 +44,7 @@ export class UpdateConfigService implements IUpdateConfigService {
     async updateKeyFromChild(child: string, key: string, value: string): Promise<void> {
         let configContent: string;
 
-        try {
-            configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
-        } catch (error) {
-            throw new Error('Config file not found.');
-        }
+        configContent = fs.readFileSync(path.join(getRootDir(), '.clonerConfig'), 'utf-8');
 
         const lines = configContent.split('\n');
         const updatedLines: string[] = [];
@@ -82,10 +74,6 @@ export class UpdateConfigService implements IUpdateConfigService {
             } else {
                 updatedLines.push(line);
             }
-        }
-
-        if (!keyUpdated) {
-            throw new Error(`Key [${key}] not found in child section [${child}]`);
         }
 
         fs.writeFileSync(path.join(getRootDir(), '.clonerConfig'), updatedLines.join('\n'), 'utf-8');

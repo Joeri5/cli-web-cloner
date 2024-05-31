@@ -30,7 +30,7 @@ export class VercelAuthService implements IVercelAuthService {
                     if (result.data.token) {
                         clearInterval(loaderInterval);
                         clearInterval(validationInterval);
-                        await this.configService.writeConfig.write("auth", {
+                        await this.configService.writeConfig.write("vercel", {
                             token: result.data.token,
                             email: email
                         });
@@ -72,7 +72,7 @@ export class VercelAuthService implements IVercelAuthService {
     }
 
     async isAuthenticated(): Promise<boolean> {
-        const token = await this.configService.readConfig.readKeyFromChild("auth", "token");
+        const token = await this.configService.readConfig.readKeyFromChild("vercel", "token");
         return !!token;
     }
 }

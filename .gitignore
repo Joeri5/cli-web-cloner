@@ -33,3 +33,6 @@ Thumbs.db
 
 # Coverage directory
 coverage/
+
+# Environment variables file
+.env

@@ -6,5 +6,7 @@ export * from "./ConfigExtractorService";
 export * from "./VercelService";
 export * from "./ConfigService";
 export * from "./VercelCommandService";
+export * from "./TransipService";
+export * from "./DomainService";
 export * from "./config/";
 export * from "./vercel/";

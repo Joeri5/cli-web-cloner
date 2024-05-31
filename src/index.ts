@@ -8,15 +8,19 @@ import {
     IBuildOptions,
     IDeployService,
     IDomainManager,
+    IDomainService,
     IProjectService,
+    ITransipService,
     IVercelService,
     IWebsiteDeployer
 } from "./interfaces";
 import "./container";
 import select from "@inquirer/select";
+import dotenv from "dotenv";
 
 
 const program = new Command();
+dotenv.config();
 
 program
     .name("web-clone-deployer")
@@ -28,6 +32,7 @@ program
     .description('Test the CLI')
     .action(() => {
         console.log("Test successful");
+        console.log(process.env.TEST);
     });
 
 program
@@ -193,8 +198,8 @@ program
                 await deployerService.deploy({yes: true, prod: true});
         }
 
-        // const allProjects = await projectService.get().then((result) => result.data);
-        // console.log(allProjects?.projects[0]?.targets?.production?.alias[0]);
+        const allProjects = await projectService.get().then((result) => result.data);
+        console.log('https://' + allProjects?.projects[0]?.targets?.production?.alias[0]);
     });
 
 program
@@ -214,6 +219,81 @@ program
     .action((projectId: string, domain: string) => {
         const manager = container.resolve<IDomainManager>("IDomainManager");
         manager.addDomain(projectId, domain);
+    });
+
+const transipCommand = program
+    .command('transip')
+    .description("Transip commands");
+
+transipCommand
+    .command('set-token')
+    .description('Set the Transip API token')
+    .argument('<token>', 'Transip API token')
+    .action(async (token: string) => {
+        const transipService = container.resolve<ITransipService>("ITransipService");
+
+        try {
+            await transipService.writeToken(token);
+            console.log('Token set');
+        } catch (error) {
+            console.error('Error setting token');
+        }
+    });
+
+transipCommand
+    .command('get-token')
+    .description('Get the Transip API token')
+    .action(async () => {
+        const transipService = container.resolve<ITransipService>("ITransipService");
+
+        try {
+            const token = await transipService.readToken();
+            console.log('Token:', token);
+        } catch (error) {
+            console.error('Error getting token');
+        }
+    });
+
+transipCommand
+    .command('update-token')
+    .description('Update the Transip API token')
+    .argument('<token>', 'Transip API token')
+    .action(async (token: string) => {
+        const transipService = container.resolve<ITransipService>("ITransipService");
+
+        try {
+            await transipService.updateToken(token);
+            console.log('Token updated');
+        } catch (error) {
+            console.error('Error updating token');
+        }
+    });
+
+transipCommand
+    .command('delete-token')
+    .description('Delete the Transip API token')
+    .action(async () => {
+        const transipService = container.resolve<ITransipService>("ITransipService");
+
+        try {
+            await transipService.deleteToken();
+            console.log('Token deleted');
+        } catch (error) {
+            console.error('Error deleting token');
+        }
+    });
+
+const domainCommand = program
+    .command('domain')
+    .description('Domain commands');
+
+domainCommand
+    .command('check')
+    .description('Check the availability of a domain')
+    .argument('<domain>', 'Domain to check')
+    .action(async (domain: string) => {
+        const domainService = container.resolve<IDomainService>("IDomainService");
+        await domainService.checkDomain(domain);
     });
 
 program.parse(process.argv);

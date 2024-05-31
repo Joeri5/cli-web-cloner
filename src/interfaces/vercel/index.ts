@@ -9,3 +9,4 @@ export * from "./IProjectService";
 export * from "./ILinkService";
 export * from "./IPullService";
 export * from "./IDeployService";
+export * from "./IProjectService";

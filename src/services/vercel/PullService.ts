@@ -1,5 +1,4 @@
-import {IPullService, IVercelCommandService} from "../../interfaces";
-import {IPullOptions} from "../../interfaces/vercel/options/pull";
+import {IPullOptions, IPullService, IVercelCommandService} from "../../interfaces";
 import {inject, injectable} from "tsyringe";
 
 @injectable()

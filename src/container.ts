@@ -11,11 +11,13 @@ import {
     IDeleteConfigService,
     IDeployService,
     IDomainManager,
+    IDomainService,
     IInitService,
     ILinkService,
     IProjectService,
     IPullService,
     IReadConfigService,
+    ITransipService,
     IUpdateConfigService,
     IVercelAuthService,
     IVercelCommandService,
@@ -33,10 +35,15 @@ import {
     ConfigExtractorService,
     ConfigService,
     DeleteConfigService,
+    DeployService,
     DomainManager,
+    DomainService,
     InitService,
     LinkService,
+    ProjectService,
+    PullService,
     ReadConfigService,
+    TransipService,
     UpdateConfigService,
     VercelAuthService,
     VercelCommandService,
@@ -45,9 +52,6 @@ import {
     WebsiteDeployer,
     WriteConfigService
 } from "./services";
-import {ProjectService} from "./services/vercel/ProjectService";
-import {PullService} from "./services/vercel/PullService";
-import {DeployService} from "./services/vercel/DeployService";
 
 container.register<IWebsiteCloner>('IWebsiteCloner', {
     useClass: WebsiteCloner
@@ -121,6 +125,16 @@ container.register<IVercelCommandService>("IVercelCommandService", {
 container.register<IConfigService>("IConfigService", {
     useClass: ConfigService,
 });
+
+//-------------------------------------------------------------------------------------------------------------------
+container.register<IDomainService>("IDomainService", {
+    useClass: DomainService,
+});
+
+//-------------------------------------------------------------------------------------------------------------------
+container.register<ITransipService>("ITransipService", {
+    useClass: TransipService,
+})
 
 // <---- services needed by ConfigService ---->
 container.register<IConfigExtractorService>("IConfigExtractorService", {
