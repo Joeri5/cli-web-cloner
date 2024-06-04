@@ -1,6 +1,6 @@
 {
   "name": "@cli-web-cloner/cloner",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "CLI to clone, deploy websites and add domains",
   "repository": "https://github.com/Joeri5/cli-web-cloner",
   "main": "dist/index.js",

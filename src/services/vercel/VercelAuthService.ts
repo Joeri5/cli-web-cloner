@@ -63,11 +63,11 @@ export class VercelAuthService implements IVercelAuthService {
     }
 
     async logout(): Promise<void> {
-        await this.configService.deleteConfig.deleteChild("auth");
+        await this.configService.deleteConfig.deleteChild("vercel");
     }
 
     async whoami(): Promise<void> {
-        const config = await this.configService.readConfig.readChild("auth");
+        const config = await this.configService.readConfig.readChild("vercel");
         console.log(`Logged in as: ${config.email}`);
     }
 
