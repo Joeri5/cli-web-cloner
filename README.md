@@ -1,167 +1,381 @@
-# CLI Web Cloner
+# cli-web-cloner
 
-CLI Web Cloner is a command-line application to clone websites and add domains automatically.
+A simple CLI tool to make your local web development project deployment a breeze.
 
 ## Table of Contents
 
+#### [prerequisites](#prerequisites)
+
+- [Terminal](#terminal)
+- [Node.js](#nodejs)
+- [NPM](#npm)
+- [Vercel](#vercel)
+- [TransIp](#transip)
+    - [How to create a personal API token](#how-to-create-a-personal-api-token)
 - [Installation](#installation)
-    - [Installing Node.js](#installing-nodejs)
-        - [Windows](#windows)
-        - [macOS](#macos)
-        - [Linux](#linux)
 - [Usage](#usage)
 - [Commands](#commands)
-    - [clone](#clone)
-    - [add-domain](#add-domain)
-    - [list-domains](#list-domains)
-    - [remove-domain](#remove-domain)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
+    - [`test`](#1-test)
+    - [`init`](#2-init)
+    - [`link`](#3-link)
+    - [`list`](#4-list)
+    - [`build`](#5-build)
+    - [`pull`](#6-pull)
+    - [`auth`](#7-auth)
+        - [`login`](#login)
+        - [`logout`](#logout)
+        - [`whoami`](#whoami)
+        - [`status`](#status)
+    - [`clone`](#8-clone)
+    - [`transip`](#9-transip)
+        - [`set-token`](#set-token)
+        - [`get-token`](#get-token)
+        - [`update-token`](#update-token)
+        - [`delete-token`](#delete-token)
+    - [`domain`](#10-domain)
+        - [`check`](#check)
+        - [`list`](#list)
+        - [`buy`](#buy)
+    - [Vercel Domain Subcommands](#vercel-domain-subcommands)
+        - [`add`](#add)
+        - [`buy`](#buy)
+        - [`inspect`](#inspect)
+        - [`list`](#list)
+        - [`move`](#move)
+        - [`remove`](#remove)
+        - [`transfer`](#transfer)
 - [License](#license)
+- [Acknowledgments](#acknowledgments)
+
+## Prerequisites
+
+A few things you need to have installed and set up before you can use this tool.
+
+### Terminal
+
+The tool is a command-line tool, so you need to have a terminal to run it. You can use the terminal that comes with your
+operating system, or you can use a third-party terminal like [Hyper](https://hyper.is/).
+For more information on how to use the terminal, you can check out
+this [tutorial](https://www.codecademy.com/articles/command-line-commands).
+
+### Node.js
+
+This tool is built with Node.js, so you need to have it installed on your system. You can download it from
+the [official website](https://nodejs.org/).
+Follow the instructions on the [official website](https://nodejs.org/) to install it on your system.
+
+### NPM
+
+npm is the package manager for Node.js. It comes with Node.js, so you don't need to install it separately.
+
+### Vercel
+
+To use this tool the user needs to have a Vercel account. You can sign up for a free account on
+the [Vercel website](https://vercel.com/).
+This tool uses Vercel to deploy the project to the web.
+
+### TransIp
+
+To use this tool the user needs to have a TransIp account. You can sign up for a free account on
+the [TransIp website](https://www.transip.nl/). For domain purchase and configuration for TransIp domains a user needs
+to create a personal API token.
+
+#### How to create a personal API token
+
+To create this token log in to the TransIp dashboard and navigate to the **control panel** > **settings** > **API**.
+There the user needs to enable the API status, after enabling the API status the user can create a personal API token.
+This can be done by going to the **Access tokens** section and creating a new 1 month valid token.
+<br />
+<br />
+⚠️ **Warning**: This token is only valid for 1 month, after that the user needs to create a new token. And set the new
+token.
 
 ## Installation
 
-### Installing Node.js
+To install this tool, you can use the following command:
 
-To run CLI Web Cloner, you need to have Node.js installed. Here are instructions for installing Node.js on various
-operating systems.
-
-#### Windows
-
-1. Go to the [Node.js download page](https://nodejs.org/).
-2. Download the Windows installer.
-3. Run the installer. Follow the prompts to complete the installation.
-4. Open a command prompt (CMD) and verify the installation by running:
-    ```sh
-    node -v
-    npm -v
-    ```
-
-#### macOS
-
-1. Go to the [Node.js download page](https://nodejs.org/).
-2. Download the macOS installer.
-3. Run the installer. Follow the prompts to complete the installation.
-4. Open a terminal and verify the installation by running:
-    ```sh
-    node -v
-    npm -v
-    ```
-
-Alternatively, you can use Homebrew:
-
-```sh
-brew install node
-```
-
-#### Linux
-
-For most Linux distributions, you can install Node.js via the package manager.
-
-Ubuntu/Debian:
-
-```sh
-sudo apt update
-sudo apt install nodejs npm
-```
-
-#### CentOS/RHEL:
-
-```sh
-sudo yum install nodejs npm
-```
-
-For other distributions, refer to their respective package managers or follow the instructions on the Node.js download
-page.
-
-### Installing CLI Web Cloner
-
-After installing Node.js, run the following command to install CLI Web Cloner:
-
-```sh
+```bash
 npm install -g cli-web-cloner
 ```
 
+This will install the tool globally on your system, so you can use it from anywhere.
+
 ## Usage
 
-After installation, you can use the **cloner** command followed by any of the available commands and options.
+To use this tool, you can run the following command:
+
+```bash
+cloner
+```
+
+This will start the tool, and you will be asked to enter the URL of the website you want to clone.
 
 ## Commands
 
-### **clone**
+The `cloner` CLI tool provides several commands to help you manage your web projects and domains. Below is a detailed
+guide on how to use each command.
 
-Clones a website.
+### 1. `test`
 
-**Usage**
+This command checks if the CLI tool is working correctly.
 
-```sh
-cloner clone <url> [options]
-```
+- **How to Use:**
+    1. Open your terminal.
+    2. Type the following command and press Enter:
+  ```sh
+  cloner test
+  ```
+    3. You should see a message saying "Test successful".
 
-### **Options**
+### 2. `init`
 
-- **-o, --output <path>**: Specify the output directory for the cloned website.
-- **-d, --depth <number>**: Set the depth of cloning (default is 1).
-- **-i, --include <pattern>**: Include only files matching the pattern.
-- **-e, --exclude <pattern>**: Exclude files matching the pattern.
-- **-h, --help**: Display help for the clone command.
+This command sets up a new project for you.
 
-### **add-domain**
+- **How to Use:**
+    1. Decide on a name for your project.
+    2. Open your terminal.
+    3. Type the following command, replacing `<projectName>` with your project name, and press Enter:
+  ```sh
+  cloner init <projectName>
+  ```
+    4. If you want to use a specific framework (like React or Vue), add `-f <frameworkName>` to the command.
 
-Adds a domain to the configuration.
+### 3. `link`
 
-**Usage**
+This command links an existing project.
 
-```shell
-cloner add-domain <domain> [options]
-```
+- **How to Use:**
+    1. Open your terminal.
+    2. Type the following command and press Enter:
+  ```sh
+  cloner link
+  ```
+    3. If you want to skip confirmation, add `-y` to the command.
 
-### **Options**
+### 4. `list`
 
-- **-h, --help**: Display help for the add-domain command.
+This command lists all your projects.
 
-### **list-domains**
+- **How to Use:**
+    1. Open your terminal.
+    2. Type the following command and press Enter:
+  ```sh
+  cloner list
+  ```
+    3. If you want to update the list, add `-u` to the command.
 
-Lists all domains in the configuration.
+### 5. `build`
 
-**Usage**
+This command builds your project, making it ready for deployment.
 
-```shell
-cloner list-domains [options]
-```
+- **How to Use:**
+    1. Open your terminal.
+    2. Type the following command and press Enter:
+  ```sh
+  cloner build
+  ```
+    3. If you want to build for production, add `-p` to the command.
 
-### **Options**
+### 6. `pull`
 
-- **-t, --transip**: List domains in your TransIP account.
-- **-v, --vercel**: List domains in your Vercel account.
-- **-a, --all**: List all domains.
-- **-h, --help**: Display help for the list-domains command.
+This command pulls the latest version of your project.
 
-### **remove-domain**
+- **How to Use:**
+    1. Open your terminal.
+    2. Type the following command and press Enter:
+  ```sh
+  cloner pull
+  ```
 
-Removes a domain from the configuration.
+### 7. `auth`
 
-**Usage**
+This command helps you manage your Vercel account authentication.
 
-```shell
-cloner remove-domain <domain> [options]
-```
+#### Subcommands:
 
-### **Options**
+- **login**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<email>` with your email address, and press Enter:
+      ```sh
+      cloner auth login <email>
+      ```
 
-- **-h, --help**: Display help for the remove-domain command.
+- **logout**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command and press Enter:
+      ```sh
+      cloner auth logout
+      ```
 
-## Configuration
+- **whoami**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command and press Enter:
+      ```sh
+      cloner auth whoami
+      ```
 
-CLI Web Cloner uses a configuration file named .clonerConfig in the user's home directory. The configuration file stores
-information about the added domains.
+- **status**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command and press Enter:
+      ```sh
+      cloner auth status
+      ```
 
-## Contributing
+### 8. `clone`
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+This command clones a website project.
+
+- **How to Use:**
+    1. Open your terminal.
+    2. Type the following command, replacing `<projectName>` with your project name, and press Enter:
+  ```sh
+  cloner clone <projectName>
+  ```
+
+### 9. `transip`
+
+This command group helps you manage your Transip API token.
+
+#### Subcommands:
+
+- **set-token**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<token>` with your Transip API token, and press Enter:
+      ```sh
+      cloner transip set-token <token>
+      ```
+
+- **get-token**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command and press Enter:
+      ```sh
+      cloner transip get-token
+      ```
+
+- **update-token**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<token>` with your Transip API token, and press Enter:
+      ```sh
+      cloner transip update-token <token>
+      ```
+
+- **delete-token**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command and press Enter:
+      ```sh
+      cloner transip delete-token
+      ```
+
+### 10. `domain`
+
+This command group helps you manage domains.
+
+#### Subcommands:
+
+- **check**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` with the domain name, and press Enter:
+      ```sh
+      cloner domain check <domain>
+      ```
+
+- **list**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command and press Enter:
+      ```sh
+      cloner domain list
+      ```
+
+- **buy**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` with the domain name, and press Enter:
+      ```sh
+      cloner domain buy <domain>
+      ```
+
+#### Vercel Domain Subcommands:
+
+- **add**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` and `<project>` with the domain and project names, and press
+           Enter:
+      ```sh
+      cloner domain vercel add <domain> <project>
+      ```
+
+- **buy**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` with the domain name, and press Enter:
+      ```sh
+      cloner domain vercel buy <domain>
+      ```
+
+- **inspect**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` with the domain name, and press Enter:
+      ```sh
+      cloner domain vercel inspect <domain>
+      ```
+
+- **list**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command and press Enter:
+      ```sh
+      cloner domain vercel list
+      ```
+
+- **move**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` and `<scopeName>` with the domain name and scope name, and
+           press Enter:
+      ```sh
+      cloner domain vercel move <domain> <scopeName>
+      ```
+
+- **remove**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` with the domain name, and press Enter:
+      ```sh
+      cloner domain vercel remove <domain>
+      ```
+
+- **transfer**
+    - **How to Use:**
+        1. Open your terminal.
+        2. Type the following command, replacing `<domain>` with the domain name, and press Enter:
+      ```sh
+      cloner domain vercel transfer <domain>
+      ```
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-Feel free to reach out to me at [info@joeri.net](mailto:info@joeri.net) if you have any questions or suggestions.
+## Acknowledgments
+
+- [Vercel](https://vercel.com/)
+- [TransIp](https://www.transip.nl/)
+- [Node.js](https://nodejs.org/)
+- [NPM](https://www.npmjs.com/)
+
+## Author
+
+- Joeri Schenk
+- [GitHub](https://github.com/Joeri5)
